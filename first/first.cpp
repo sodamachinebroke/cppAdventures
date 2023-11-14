@@ -1,7 +1,7 @@
 #include <iostream>
-#include <string> //need to include string, cause c++ doesn't have String by default
+#include <string> //need to include string, because c++ doesn't have String by default
 
-// using namespace std;
+// using namespace std; considered non-standard practice, discouraged
 
 void example()
 {
