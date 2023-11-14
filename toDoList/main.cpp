@@ -1,73 +1,99 @@
 #include <iostream>
 #include <vector>
+#include <limits>
+#include <header/taskManager.h>
+#include <header/common.h>
 
-using namespace std;
-
-struct Task
+class concreteTaskManager : public TaskManager
 {
-    string description;
-    int priority;
+private:
+    std::vector<std::string> tasks;
+
+public:
+    void addTask(std::vector<Task> &tl) override
+    {
+        Task newTask;
+
+        std::cout << "Describe your task!" << std::endl;
+        std::cin >> newTask.description;
+        std::cout << "Give me the priority for said task!" << std::endl;
+        std::cin >> newTask.priority;
+
+        tl.push_back(newTask);
+        fflush(stdin);
+    }
+    void removeTask(std::vector<Task> &tl) override
+    {
+        int temp;
+        std::cout << "Tell me, which task would you like to remove!" << std::endl;
+        std::cin >> temp;
+        while (temp < 0 || temp > tl.size() - 1)
+        {
+            tl.erase(tl.begin() + temp);
+        }
+    }
+    void listTasks(std::vector<Task> &tl) override
+    {
+        std::cout << "Listing all tasks!" << std::endl;
+        for (int i = 0; i < tl.size(); i++)
+        {
+            std::cout << "Description: " << tl[i].description << "\nPriority: " << tl[i].priority << "\n"
+                      << std::endl;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Press enter to continue..." << std::endl;
+        std::cin.get();
+    }
 };
 
 int main()
 {
-    vector<Task> taskList; // a vector is a sort of list
+    concreteTaskManager taskManager;
+    std::vector<Task> taskList; // a vector is a sort of list
 
-    cout << "Hello and welcome!" << endl;
+    std::cout << "Hello and welcome!" << std::endl;
 
     while (true)
     {
-        cout << "Select an option:" << endl;
-        cout << "1. Add task" << endl;
-        cout << "2. Remove task" << endl;
-        cout << "3. List tasks" << endl;
-        cout << "4. Exit application" << endl;
+        std::cout << "Select an option:" << std::endl
+                  << "1. Add task" << std::endl
+                  << "2. Remove task" << std::endl
+                  << "3. List tasks" << std::endl
+                  << "4. Exit application" << std::endl;
 
         int choice;
-        cout << "Enter your choice: ";
-        cin >> choice;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
-        Task newTask;
-
-            switch (choice)
-            {
-            case 1:
-            {
-                cout << "Describe your task!" << endl;
-                cin >> newTask.description;
-                cout << "Give me the priority for said task!" << endl;
-                cin >> newTask.priority;
-
-                taskList.push_back(newTask);
-                fflush(stdin);
-                break;
-            }
-            /*case 2:
-            {
-                {
-                int temp;
-                cout << "Tell me, which task would you like to remove!" <<endl;
-                bool wrong = true;
-                while (wrong)
-                {
-                    cin >> temp;
-                    if(temp < 0 && temp > taskList.size()-1)
-                }
-                
-                
-                }
-                break;
-            }*/
-            default:
-                break;
-            }
-
-        if (choice == 4)
+        switch (choice)
         {
-            cout << "Byeeee!" << endl;
+        case 1:
+        {
+            taskManager.addTask(taskList);
             break;
         }
-    }
+        case 2:
+        {
+            taskManager.removeTask(taskList);
+            break;
+        }
 
-    return 0;
+        case 3:
+        {
+            taskManager.listTasks(taskList);
+            break;
+        }
+
+        case 4:
+        {
+            std::cout << "Byeeee!" << std::endl;
+            return 0;
+        }
+
+        default:
+        {
+            break;
+        }
+        }
+    }
 }
