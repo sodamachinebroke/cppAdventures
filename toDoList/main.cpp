@@ -55,16 +55,15 @@ public:
 class uiInstance : public uiManager
 {
 public:
-
-    void secureInputRead(int &c) override{
-        while (!(std::cin >> c))
-            {
-                //loop until a valid integer is entered
-                std::cout << "Invalid input. Please enter a valid integer." << std::endl;
-                std::cin.clear(); // Clear the error state
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the invalid input in the buffer
-                std::cout << "Enter your choice: ";
-            }
+    void secureInputRead(int &c) override
+    {
+        while (!(std::cin >> c)) // Loop until a valid integer is entered
+        {
+            std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+            std::cin.clear();                                                   // Clear the error state
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the invalid input in the buffer
+            std::cout << "Enter your choice: ";
+        }
     }
     int menu() override
     {
@@ -79,7 +78,7 @@ public:
 
             std::cout << "Enter your choice: ";
             secureInputRead(choice);
-            
+
         } while (choice < 1 || choice > 4);
 
         return choice;
