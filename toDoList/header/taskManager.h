@@ -1,10 +1,11 @@
 #ifndef TASK_MANAGER_H
 #define TASK_MANAGER_H
-
+#include "common.h"
 #include <iostream>
 
 // Abstract class
-class TaskManager {
+class TaskManager
+{
 public:
     // Pure virtual function for adding a task
     virtual void addTask(std::vector<Task> &tl) = 0;

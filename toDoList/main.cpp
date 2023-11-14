@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include <header/taskManager.h>
-#include <header/common.h>
+#include "header/taskManager.h"
+#include "header/common.h"
 
 class concreteTaskManager : public TaskManager
 {
@@ -20,16 +20,22 @@ public:
         std::cin >> newTask.priority;
 
         tl.push_back(newTask);
-        fflush(stdin);
     }
     void removeTask(std::vector<Task> &tl) override
     {
         int temp;
-        std::cout << "Tell me, which task would you like to remove!" << std::endl;
+        std::cout << "Tell me, which task would you like to remove! (Starting from 1)" << std::endl;
         std::cin >> temp;
-        while (temp < 0 || temp > tl.size() - 1)
+        temp--;
+        if (temp >= 0 && temp < tl.size())
         {
             tl.erase(tl.begin() + temp);
+        }
+        else
+        {
+            std::cout << "There is no note with this index. Press enter to continue." << std::endl;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
         }
     }
     void listTasks(std::vector<Task> &tl) override
@@ -46,26 +52,52 @@ public:
     }
 };
 
+class uiInstance : public uiManager
+{
+public:
+
+    void secureInputRead(int &c) override{
+        while (!(std::cin >> c))
+            {
+                //loop until a valid integer is entered
+                std::cout << "Invalid input. Please enter a valid integer." << std::endl;
+                std::cin.clear(); // Clear the error state
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the invalid input in the buffer
+                std::cout << "Enter your choice: ";
+            }
+    }
+    int menu() override
+    {
+        int choice;
+        do
+        {
+            std::cout << "Select an option:" << std::endl
+                      << "1. Add task" << std::endl
+                      << "2. Remove task" << std::endl
+                      << "3. List tasks" << std::endl
+                      << "4. Exit application" << std::endl;
+
+            std::cout << "Enter your choice: ";
+            secureInputRead(choice);
+            
+        } while (choice < 1 || choice > 4);
+
+        return choice;
+    }
+};
+
 int main()
 {
     concreteTaskManager taskManager;
+    uiInstance uiManager;
     std::vector<Task> taskList; // a vector is a sort of list
 
     std::cout << "Hello and welcome!" << std::endl;
 
     while (true)
     {
-        std::cout << "Select an option:" << std::endl
-                  << "1. Add task" << std::endl
-                  << "2. Remove task" << std::endl
-                  << "3. List tasks" << std::endl
-                  << "4. Exit application" << std::endl;
 
-        int choice;
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
-
-        switch (choice)
+        switch (uiManager.menu())
         {
         case 1:
         {
