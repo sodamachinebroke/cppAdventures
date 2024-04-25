@@ -25,7 +25,7 @@ void inputPractice()
 int main()
 {
     //float eg = 35e3; you can use "e" to display the power of the number.
-    //std::cout << (5>3); this will compare 5 and 3 and will give 1 or 0 depending on if our statement is true
-    
+    std::cout << (5>3); //this will compare 5 and 3 and will give 1 or 0 depending on if our statement is true
+    std::cout << "\nSCHLONG";
     return 0;
 }
